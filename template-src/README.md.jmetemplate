@@ -1,0 +1,52 @@
+# [GAME_NAME_FULL]
+
+jMonkeyEngine [JME_VERSION], Java [JAVA_VERSION].
+
+`app` contains shared game code and assets. Each `platform-*` module contains only its launcher.
+
+## Prerequisites
+
+Install JDK 21 to run Gradle (this is separate from the selected game Java version).
+Foojay automatically downloads the selected compilation/runtime toolchains when absent.
+No JDK is bundled with this ZIP.
+
+[IF=DESKTOP]## Desktop
+
+`./gradlew :platform-desktop:run`
+
+Use `:platform-desktop:installDist` or `:platform-desktop:distZip` for a distribution.
+Build distributions on their target OS. macOS requires `-XstartOnFirstThread`, already configured.
+[/IF=DESKTOP]
+
+[IF=ANDROID]## Android
+
+Install Android SDK platform 36 and Build Tools 36.0.0. Set `ANDROID_HOME` or `sdk.dir`
+in an untracked `local.properties`.
+
+`./gradlew :platform-android:assembleDebug`
+
+This template targets API 36 with minSdk [ANDROID_MIN_SDK]. Java 25 is desktop-only.
+Keep shared code within Android's available APIs.
+[/IF=ANDROID]
+
+[IF=IOS]## iOS
+
+Requires macOS with Xcode, its command-line tools, and an installed iOS Simulator runtime.
+libJGLIOS provisions its specialized GraalVM toolchain.
+
+`./gradlew :platform-ios:runIosDebugApp -PiosAppTarget=simulator`
+
+Device builds and signing require your own Apple development team and provisioning configuration.
+See [libJGLIOS documentation](https://github.com/NostrGameEngine/libJGLIOS).
+[/IF=IOS]
+
+## Community modules
+
+Repositories are centralized in `settings.gradle.kts`; published artifacts, runtime dependencies,
+and engine exclusions are in `app/build.gradle.kts`. Original Library snippets are retained under
+`gradle/library-snippets/` as non-executable references. GitHub Packages reads
+`GITHUB_PACKAGES_USERNAME` and `GITHUB_PACKAGES_TOKEN` from the environment when required.
+
+[MODULE_LINKS]
+
+[Support jMonkeyEngine](https://jmonkeyengine.org/donate/) and the module authors through their project pages.
