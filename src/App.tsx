@@ -268,14 +268,14 @@ export function App({configuration}: {configuration: InitializerConfig}): ReactE
                 </div>
                 <div className="module-column">
                     <section className="panel core-modules-panel"><div className="library-heading"><h2><span>05</span> Core modules</h2><span className="selection-count">{coreModules.length} selected</span></div>
-                        <p className="help">Optional jMonkeyEngine modules. Required platform modules are included automatically.</p>
+                        <p className="help">Optional jMonkeyEngine modules.</p>
                         <div className="core-module-list">{configuration.coreModules.map((module: EngineModuleDefinition) => {
                             const enabled: boolean = supportsCoreModule(module, platforms);
                             return <CoreModuleCard key={module.id} module={module} enabled={enabled} selected={coreModules.includes(module.id)}
                                 toggle={() => setCoreModules(values => values.includes(module.id) ? values.filter(value => value !== module.id) : [...values, module.id])}/>;
                         })}</div></section>
                     <section className="panel library-panel"><div className="library-heading"><h2><span>06</span> Community modules</h2><span className="selection-count">{selected.length} selected</span></div>
-                        <p className="help">Optional community libraries from <a href="https://jmonkeyengine.org/library/" target="_blank" rel="noopener noreferrer">the jMonkeyEngine Library</a>.</p>
+                        <p className="help">Optional community modules from <a href="https://jmonkeyengine.org/library/" target="_blank" rel="noopener noreferrer">the jMonkeyEngine Library</a>.</p>
                         <label htmlFor="module-search" className="sr-only">Search modules</label><input type="search" id="module-search" placeholder="Search modules, authors or tags…" value={query}
                             maxLength={100} onChange={event => {setPage(0); setQuery(event.target.value);}}/>
                         <div className="tag-list" aria-label="Filter by category"><button type="button" className={!tag ? 'active' : ''} onClick={() => {setTag(''); setPage(0);}}>All</button>
@@ -306,7 +306,6 @@ export function App({configuration}: {configuration: InitializerConfig}): ReactE
         {downloaded && <p className="success-message">Your project is ready. Unzip it and follow README.md. <a href="https://jmonkeyengine.org/donate/">Support jMonkeyEngine ↗</a></p>}
         {preview && <section className="panel preview"><div className="library-heading"><h2>Generated Gradle configuration</h2><button type="button" onClick={() => setPreview(null)}>Close preview</button></div>
             {[...preview.entries()].map(([path, code]) => <details key={path} open={path === 'app/build.gradle.kts'}><summary>{path}</summary><pre><code>{code}</code></pre></details>)}</section>}
-        <footer>Built for jMonkeyEngine {configuration.jmeVersion}. <a href="https://wiki.jmonkeyengine.org/">Documentation ↗</a></footer>
     </main>;
 }
 

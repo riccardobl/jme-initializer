@@ -27,8 +27,8 @@
       "recommended": true,
       "platforms": ["windows", "linux", "macos", "android", "ios"],
       "settingsByPlatform": {"windows": "ANGLE_GLES3", "linux": "ANGLE_GLES3", "macos": "ANGLE_GLES3"},
-      "description": "Uses the unified OpenGL ES 3 renderer through the best ANGLE driver available on each platform.",
-      "summary": "Recommended for consistent cross-platform behavior and a smaller testing matrix."
+      "description": "Unified OpenGL ES 3 implemented on top of the best modern API available on each platform.",
+      "summary": "Recommended for consistent cross-platform behavior."
     },
     {
       "id": "GL32",
@@ -90,14 +90,14 @@
   "allocators": [
     {
       "id": "safer",
-      "name": "Safe Native Allocator",
+      "name": "Hardened Native Allocator",
       "recommended": true,
-      "description": "Cross-platform hardened native allocator with better memory management.",
+      "description": "Cross-platform hardened native allocator with advanced memory management.",
       "module": {"id": "jme3-saferallocator", "target": "app"}
     },
     {
       "id": "platform",
-      "name": "Platform Allocator",
+      "name": "Platform Native Allocator",
       "description": "Uses the allocator supplied by each platform backend. It can be faster with lower overhead in some workloads, but is less secure."
     }
   ],
