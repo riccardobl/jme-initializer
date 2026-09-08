@@ -1,0 +1,14 @@
+plugins { `java-library` }
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of([JAVA_VERSION]))
+}
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set([JAVA_VERSION])
+    options.encoding = "UTF-8"
+}
+dependencies {
+    api("org.jmonkeyengine:jme3-core:[JME_VERSION]")
+    implementation("org.jmonkeyengine:jme3-effects:[JME_VERSION]")
+    runtimeOnly("org.jmonkeyengine:jme3-plugins:[JME_VERSION]")
+[DEPENDENCIES]
+}

@@ -1,82 +1,83 @@
-# README #
+# jMonkeyEngine Project Initializer
 
-### What is this repository for? ###
+A static React and TypeScript application that creates jMonkeyEngine 3.10 projects
+entirely in the browser. The generated ZIP keeps shared game code in `app/` and uses
+separate desktop, Android, and iOS launcher modules.
 
-This is a server side application to support rest calls (probably from a web UI "somewhere") that will produce a starter
-gradle JMonkey project as a zip based on user choices.  
+The merge engine is a deliberately Java-like TypeScript port of Richard Tingle's
+original `Merger`. It preserves the established merge fields, `[IF=...]`,
+`[NOT=...]`, OR conditions, fragments, `.jmetemplate`, `[DOT]`, path filtering, and
+multiline-indentation behavior.
 
-It also contains an optional UI written in react, the styling for this is an "interesting" mix of bootstrap and
-the JMonkey engine website styling. So it looks in keeping with the rest of Jmonkey.org, but is a little eccentric and 
-a lot of bootstrap stuff doesn't work properly
+## Run locally
 
-There is a general approach of merge fields which allow both file path segments and file content to be replaced with user data
+Install Node.js 24 and run:
 
-### How do I get set up? ###
+```sh
+npm ci
+npm run dev
+```
 
-* You will need a java 17 JDK & IDE of your choice that supports gradle
-* Start the application by running JmeInitializerApplication
-* Go to localhost:8080 to see its UI
+The app defaults to `https://library.jmonkeyengine.org/`. Override it for local work:
 
-### How do I run it in prod
+```sh
+VITE_LIBRARY_API_BASE=http://localhost:8080/ npm run dev
+```
 
-Run the gradle task bootjar, that will produce a jar under build\libs\. Rename the jar jmeinitializer.jar then put it 
-whereever you want it. Then run:
+The browser reads only the Library's public `/api/extensions` endpoints. It refetches
+selected modules before generation, validates publication and platform compatibility,
+and consumes structured publication metadata. Remote Gradle snippets are never run;
+they are included in the generated project only as text references.
 
-`java -jar -Dspring.profiles.active=prod jmeinitializer.jar`
+## Template and browser generation
 
-To override the fetch url pass the following -D argument
+Editable project sources live in `template-src/`. `npm run build:template` sorts them
+and creates a deterministic `public/template.zip` with fixed timestamps and Unix
+permissions. Vite then copies that archive into the static site.
 
-`-Dlibraries.fetchUrl=https://example.com/libraries.json`
+At runtime `InitializerZipService` loads `template.zip` relative to the initializer
+document, applies `Merger`, adds selected Library snippets, and creates the download
+with JSZip. The service rejects traversal, duplicate paths, unresolved instructions,
+oversized archives, and unsupported publication metadata.
 
-### Running as a docker image
+## Standalone page and website embed
 
-A docker image can be create by (with docker installed) running
+The same GitHub Pages deployment provides both:
 
-`docker build -t jmeinitializer .`
+- `/` — the complete standalone initializer;
+- `/embed.js` — an embeddable script that inserts the initializer in sandboxed mode.
 
-(Note the final `.`, it is not a typo, it means use the dockerfile in the current directory)
+Example:
 
-The image can then be run (forwarding the images internal port 80 to the host machines port 80) by running the following
+```html
+<div id="jme-initializer"></div>
+<script src="https://start.jmonkeyengine.org/embed.js"
+        data-target="#jme-initializer"></script>
+```
 
-`docker run -p 80:8080 jmeinitializer`
+`embed.js` resolves `./?embed=1` from its own `document.currentScript.src`, not from
+the parent page. The iframe loads `template.zip` and hashed application assets relative
+to its own URL. Consequently the same artifact works under a GitHub repository path or
+a custom domain without compiling either URL into the application. Resize messages are
+accepted only from the created iframe and its exact origin.
 
-### Check for vulnerabilities
+## GitHub Pages releases
 
-To check for vulnerabilities in the libraries this application uses (which should then be upgraded) run the gradle task dependencyCheckAnalyze
+The workflow type-checks, tests, builds, and checks reproducibility on pushes and pull
+requests. It uploads and deploys a Pages artifact only for a published GitHub release
+or a manual run. `actions/configure-pages` reads the repository's configured Pages
+metadata (`base_url`, `origin`, `host`, and `base_path`), while runtime asset discovery
+remains relative and independent of those values.
 
-### How does templating work
+Configure GitHub Pages to use **GitHub Actions**, then associate and verify the custom
+domain in repository settings. The included `CNAME` records the intended
+`start.jmonkeyengine.org` host but does not replace the GitHub settings or DNS change.
 
-See the folder jmetemplate, fundamentally that is what ends up in the zip, but:
+## Verify
 
-* File paths can have [IF=????]
-  * If the library in the ???? is active that path is included, otherwise it isn't
-  * Special cases of [IF=SINGLEPLATFORM] and [IF=MULTIPLATFORM] are also supported
-  * Where a folder only has an if statement, e.g. jmetemplate/[IF=SINGLEPLATFORM]/stuff then (if it is included at all) the empty folder is eliminated, becoming jmetemplate/stuff
-* File paths are scanned for merge fields. e.g. java/[GAME_PACKAGE_FOLDER]/[GAME_NAME] 
-* Text files are scanned for merge fields (see MergeField.java) and replaced with their contents. Eg. mainClassName = '[GAME_PACKAGE].[GAME_NAME]'
-* Text files can also have [IF=????] statements in them. Ended by [/IF=????]
-  * E.g. [IF=JME_ANDROID]Android module :app : holds build.gradle for the android dependencies & implements the :game module, this module can hold android dependent gui.[/IF=JME_ANDROID]
-  * These can be nested, and can be multiline
-* [DOT] is replaced by ".". This is supported because files starting with a . (like .gitignore) don't get into the jar, so don't get into the template
-* [NOT=????] work exactly like [IF=????] but the inverted.
+```sh
+npm run check
+```
 
-Additionally, optionally, you can end any file .jmetemplate. This has no actual function, but it is stripped from the 
-output file name. Its purpose is to stop IDEs from trying to do error highlighting on known file types (e.g. gradle files)
-where the IF and merge fields make the files look to the IDE as errored
-
-### Testing templates ###
-Gradle task `templateTest` will check that all the templates at least compile with sensible 
-user options. These tests are not run as part of the build because they rely on getting
-the most recent versions of external libraries. So they may pass today but not tomorrow
-
-To test the templates with android an installed android sdk is also required (another good reason 
-for this not to be plugged into the build)
-
-### API documentation ###
-
-Go to [DOMAIN]/swagger-ui.html for the api documentation. E.g. https://start.jmonkeyengine.org/swagger-ui.html
-
-### Who do I talk to? ###
-
-* Original creator: richtea
-
+This runs strict TypeScript checking, the faithful merge-engine regression suite,
+project/catalog tests, deterministic template generation, and both production bundles.

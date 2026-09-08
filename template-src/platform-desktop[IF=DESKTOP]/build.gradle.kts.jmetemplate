@@ -1,0 +1,17 @@
+plugins { application }
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of([JAVA_VERSION]))
+}
+tasks.withType<JavaCompile>().configureEach { options.release.set([JAVA_VERSION]) }
+application {
+    mainClass.set("[GAME_PACKAGE].desktop.DesktopLauncher")
+    if (System.getProperty("os.name").lowercase().contains("mac")) {
+        applicationDefaultJvmArgs = listOf("-XstartOnFirstThread")
+    }
+}
+dependencies {
+    implementation(project(":app"))
+    implementation("org.jmonkeyengine:jme3-desktop:[JME_VERSION]")
+    implementation("org.jmonkeyengine:jme3-lwjgl3:[JME_VERSION]")
+    runtimeOnly("org.jmonkeyengine:jme3-jogg:[JME_VERSION]")
+}

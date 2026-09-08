@@ -1,0 +1,27 @@
+package [GAME_PACKAGE].desktop;
+
+import [GAME_PACKAGE].Main;
+import com.jme3.system.AppSettings;
+import java.util.Locale;
+
+public final class DesktopLauncher {
+    private DesktopLauncher() { }
+
+    public static void main(String[] args) {
+        String os = System.getProperty("os.name", "").toLowerCase(Locale.ROOT);
+        String platform = os.contains("mac") ? "macos" : os.contains("win") ? "windows"
+                : os.contains("linux") ? "linux" : "unsupported OS";
+        if (!java.util.List.of([DESKTOP_TARGETS]).contains(platform)) {
+            throw new IllegalStateException("This project was not configured for " + platform);
+        }
+        Main game = new Main();
+        AppSettings settings = new AppSettings(true);
+        settings.setTitle("[GAME_NAME_FULL]");
+        settings.setResolution(1280, 720);
+        settings.setVSync(true);
+        settings.setRenderer(AppSettings.[RENDERER]);
+        game.setSettings(settings);
+        game.setShowSettings(false);
+        game.start();
+    }
+}

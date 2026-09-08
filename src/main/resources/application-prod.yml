@@ -1,4 +1,0 @@
-server:
-  port: 8080
-libraries:
-  fetchUrl: https://library.jmonkeyengine.org/ext/initializer/libraries.json
