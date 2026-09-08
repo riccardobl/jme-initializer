@@ -1,39 +1,9 @@
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
+/node_modules/
 /dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
-.vscode/
-/node_modules
-/src/main/resources/static/js/dist
-!/src/main/resources/jmetemplate/**/.vscode
+/public/template.zip
+/.gradle/
+/build/
+/.idea/
+/.vscode/
+*.iml
+.DS_Store

@@ -1,0 +1,15 @@
+plugins { application }
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of([JAVA_VERSION]))
+}
+tasks.withType<JavaCompile>().configureEach { options.release.set([JAVA_VERSION]) }
+application {
+    mainClass.set("[GAME_PACKAGE].desktop.DesktopLauncher")
+    if (System.getProperty("os.name").lowercase().contains("mac")) {
+        applicationDefaultJvmArgs = listOf("-XstartOnFirstThread")
+    }
+}
+dependencies {
+    implementation(project(":app"))
+[DESKTOP_ENGINE_DEPENDENCIES]
+}

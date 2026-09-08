@@ -1,0 +1,113 @@
+{
+  "libraryApiBase": "https://library.jmonkeyengine.org/",
+  "templateArchiveUrl": "./template.zip",
+  "versions": {
+    "jme": "3.10.0-beta2",
+    "libJgliosPlugin": "0.10",
+    "nativeImagePlugin": "3.10.0-beta2",
+    "foojayResolver": "1.0.0",
+    "androidGradlePlugin": "9.1.1"
+  },
+  "platforms": [
+    {"id": "windows", "name": "Windows", "launcher": "desktop"},
+    {"id": "linux", "name": "Linux", "launcher": "desktop"},
+    {"id": "macos", "name": "macOS", "launcher": "desktop"},
+    {"id": "android", "name": "Android", "launcher": "android"},
+    {"id": "ios", "name": "iOS", "launcher": "ios", "legacyOption": true}
+  ],
+  "javaVersions": [
+    {"version": 11, "name": "Java 11", "recommended": true, "platforms": ["windows", "linux", "macos", "android", "ios"], "androidMinSdk": 30},
+    {"version": 21, "name": "Java 21", "platforms": ["windows", "linux", "macos", "android", "ios"], "androidMinSdk": 35},
+    {"version": 25, "name": "Java 25", "platforms": ["windows", "linux", "macos"]}
+  ],
+  "renderers": [
+    {
+      "id": "GLES3",
+      "name": "ANGLE GLES 3.0",
+      "recommended": true,
+      "platforms": ["windows", "linux", "macos", "android", "ios"],
+      "settingsByPlatform": {"windows": "ANGLE_GLES3", "linux": "ANGLE_GLES3", "macos": "ANGLE_GLES3"},
+      "description": "Uses the unified OpenGL ES 3 renderer through the best ANGLE driver available on each platform.",
+      "summary": "Recommended for consistent cross-platform behavior and a smaller testing matrix."
+    },
+    {
+      "id": "GL32",
+      "name": "OpenGL 3.2 + OpenGL ES 3.0",
+      "platforms": ["windows", "linux", "macos", "android", "ios"],
+      "requiresAnyPlatform": ["windows", "linux", "macos"],
+      "settingsByPlatform": {"windows": "LWJGL_OPENGL32", "linux": "LWJGL_OPENGL32", "macos": "LWJGL_OPENGL32"},
+      "description": "Uses native OpenGL 3.2 on desktop platforms and OpenGL ES on mobile platforms.",
+      "summary": "May improve performance in some desktop workloads, but requires broader driver and platform testing."
+    },
+    {
+      "id": "GL41",
+      "name": "OpenGL 4.1 + OpenGL ES 3.0",
+      "platforms": ["windows", "linux", "macos", "android", "ios"],
+      "requiresAnyPlatform": ["windows", "linux", "macos"],
+      "settingsByPlatform": {"windows": "LWJGL_OPENGL41", "linux": "LWJGL_OPENGL41", "macos": "LWJGL_OPENGL41"},
+      "description": "Uses native OpenGL 4.1 on desktop platforms and OpenGL ES on mobile platforms.",
+      "summary": "May expose more desktop graphics features, with additional compatibility testing required."
+    },
+    {
+      "id": "GL43",
+      "name": "OpenGL 4.3 + OpenGL ES 3.0",
+      "platforms": ["windows", "linux", "android", "ios"],
+      "requiresAnyPlatform": ["windows", "linux"],
+      "settingsByPlatform": {"windows": "LWJGL_OPENGL43", "linux": "LWJGL_OPENGL43"},
+      "description": "Uses native OpenGL 4.3 on Windows and Linux and OpenGL ES on mobile platforms.",
+      "summary": "Intended for projects that need newer desktop OpenGL and can test a wider range of drivers."
+    },
+    {
+      "id": "GL45",
+      "name": "OpenGL 4.5 + OpenGL ES 3.0",
+      "platforms": ["windows", "linux", "android", "ios"],
+      "requiresAnyPlatform": ["windows", "linux"],
+      "settingsByPlatform": {"windows": "LWJGL_OPENGL45", "linux": "LWJGL_OPENGL45"},
+      "description": "Uses native OpenGL 4.5 on Windows and Linux and OpenGL ES on mobile platforms.",
+      "summary": "Provides the newest selectable desktop OpenGL target and needs the broadest compatibility testing."
+    }
+  ],
+  "requiredModules": [
+    {"id": "jme3-core", "target": "app", "configuration": "api"},
+    {"id": "jme3-plugins-json", "target": "app"},
+    {"id": "jme3-plugins-json-gson", "target": "app"},
+    {"id": "jme3-jogg", "target": "app", "configuration": "runtimeOnly"},
+    {"id": "jme3-desktop", "target": "desktop", "platforms": ["windows", "linux", "macos"]},
+    {"id": "jme3-lwjgl3", "target": "desktop", "platforms": ["windows", "linux", "macos"]},
+    {"id": "jme3-android", "target": "android", "platforms": ["android"]},
+    {"id": "jme3-ios", "target": "ios", "platforms": ["ios"]}
+  ],
+  "coreModules": [
+    {"id": "jme3-effects", "name": "Effects", "description": "Particle effects, post-processing filters, water, shadows, light scattering and related visual effects.", "selectedByDefault": true},
+    {"id": "jme3-jbullet", "name": "JBullet", "description": "Rigid-body physics integration using the pure-Java JBullet backend.", "selectedByDefault": true},
+    {"id": "jme3-networking", "name": "Networking", "description": "SpiderMonkey client/server networking, message serialization and hosted services.", "selectedByDefault": true},
+    {"id": "jme3-niftygui", "name": "Nifty GUI", "description": "Integration between jMonkeyEngine and the Nifty GUI toolkit.", "selectedByDefault": true},
+    {"id": "jme3-plugins", "name": "Asset plugins", "description": "Additional asset loaders and importers for common model, scene and image formats.", "selectedByDefault": true},
+    {"id": "jme3-terrain", "name": "Terrain", "description": "Terrain rendering, level-of-detail control, height maps and terrain utilities.", "selectedByDefault": true},
+    {"id": "jme3-testdata", "name": "Test Data", "description": "Assets used by jMonkeyEngine examples and tests. Useful for prototyping, but not intended for production distribution.", "configuration": "runtimeOnly"},
+    {"id": "jme3-awt-dialogs", "name": "AWT Settings Launcher", "description": "Shows the desktop settings dialog before launch and provides AWT-based error dialogs.", "target": "desktop", "platforms": ["windows", "linux"], "profiles": ["AWT_SETTINGS"]}
+  ],
+  "allocators": [
+    {
+      "id": "safer",
+      "name": "Safe Native Allocator",
+      "recommended": true,
+      "description": "Cross-platform hardened native allocator with better memory management.",
+      "module": {"id": "jme3-saferallocator", "target": "app"}
+    },
+    {
+      "id": "platform",
+      "name": "Platform Allocator",
+      "description": "Uses the allocator supplied by each platform backend. It can be faster with lower overhead in some workloads, but is less secure."
+    }
+  ],
+  "iosLegacy": {
+    "name": "Legacy",
+    "description": "Use the native legacy OpenGL ES bindings instead of ANGLE. This can be faster on older devices, but the API is deprecated by Apple.",
+    "engineModuleId": "jme3-ios",
+    "group": "org.ngengine",
+    "excludedModules": ["libjglios-core-ios", "libjglios-gles-ios", "libjglios-sdl3-ios", "libjglios-openal-ios", "libjglios-angle-ios"],
+    "modules": ["libjglios-legacy-core-ios", "libjglios-legacy-gles-ios", "libjglios-sdl3-ios", "libjglios-openal-ios"]
+  },
+  "android": {"compileSdk": 36, "targetSdk": 36}
+}

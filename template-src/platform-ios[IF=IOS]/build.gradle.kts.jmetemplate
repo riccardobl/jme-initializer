@@ -1,0 +1,21 @@
+plugins {
+    `java-library`
+    id("org.jmonkeyengine.nativeimage") version "[NATIVE_IMAGE_PLUGIN_VERSION]"
+    id("org.ngengine.libjglios") version "[LIBJGLIOS_PLUGIN_VERSION]"
+}
+java {
+    // GraalVM's generated entrypoints require a JDK 21 compiler even for Java 11 games.
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
+tasks.withType<JavaCompile>().configureEach { options.release.set([JAVA_VERSION]) }
+iOS {
+    mainClass.set("[GAME_PACKAGE].ios.IosLauncher")
+    bundleId.set("[GAME_PACKAGE]")
+    appName.set("[GAME_NAME_FULL]")
+    appIcon.set(rootProject.file("icon.png"))
+    assets.from(project(":app").file("src/main/resources"))
+}
+dependencies {
+    implementation(project(":app"))
+[IOS_ENGINE_DEPENDENCIES]
+}

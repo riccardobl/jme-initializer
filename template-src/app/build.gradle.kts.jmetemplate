@@ -1,0 +1,12 @@
+plugins { `java-library` }
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of([JAVA_VERSION]))
+}
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set([JAVA_VERSION])
+    options.encoding = "UTF-8"
+}
+dependencies {
+[APP_ENGINE_DEPENDENCIES]
+[DEPENDENCIES]
+}
