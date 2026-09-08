@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "[FOOJAY_RESOLVER_VERSION]"
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+[REPOSITORIES]
+    }
+}
+rootProject.name = "[GAME_NAME]"
+include(":app")
+[PLATFORMS]

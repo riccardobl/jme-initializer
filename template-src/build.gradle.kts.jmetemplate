@@ -1,0 +1,15 @@
+plugins { base }
+allprojects {
+    group = "[GAME_PACKAGE]"
+    version = "1.0.0"
+    configurations.configureEach {
+        resolutionStrategy.eachDependency {
+            // Auxiliary libraries such as drako have independent release versions.
+            if (requested.group == "org.jmonkeyengine" && requested.name.startsWith("jme3-")
+                    && requested.name != "jme3-android-native") {
+                useVersion("[JME_VERSION]")
+                because("All engine modules must use the selected jMonkeyEngine release")
+            }
+        }
+    }
+}

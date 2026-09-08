@@ -1,0 +1,12 @@
+package [GAME_PACKAGE].ios;
+
+import [GAME_PACKAGE].Main;
+import com.jme3.app.Application;
+import com.jme3.app.IosApplicationLauncher;
+
+public final class IosLauncher extends IosApplicationLauncher {
+    @Override
+    protected Application createApplication() {
+        return new Main();
+    }
+}

@@ -1,0 +1,44 @@
+import javax.imageio.ImageIO
+import java.awt.Image
+import java.awt.image.BufferedImage
+import java.awt.geom.Ellipse2D
+
+gradle.ext.generateAndroidIcons = { inputLogoPath, outputDirPath ->
+    def inputLogo = file(inputLogoPath)
+    def outputDir = file(outputDirPath)
+
+    def densities = [
+        mdpi : 48,
+        hdpi : 72,
+        xhdpi: 96,
+        xxhdpi: 144,
+        xxxhdpi: 192
+    ]
+
+    if (!inputLogo.exists()) {
+        throw new GradleException("Logo file not found at ${inputLogo}")
+    }
+
+    def original = ImageIO.read(inputLogo)
+
+    densities.each { name, size ->
+        def dir = new File(outputDir, "mipmap-${name}")
+        dir.mkdirs()
+
+        def square = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB)
+        def graphics = square.createGraphics()
+        graphics.drawImage(original.getScaledInstance(size, size, Image.SCALE_SMOOTH), 0, 0, null)
+        graphics.dispose()
+
+        ImageIO.write(square, "png", new File(dir, "ic_launcher.png"))
+        ImageIO.write(square, "png", new File(dir, "ic_launcher_foreground.png"))
+
+        def round = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB)
+        def roundGraphics = round.createGraphics()
+        roundGraphics.setClip(new Ellipse2D.Float(0, 0, size, size))
+        roundGraphics.drawImage(original.getScaledInstance(size, size, Image.SCALE_SMOOTH), 0, 0, null)
+        roundGraphics.dispose()
+
+        ImageIO.write(round, "png", new File(dir, "ic_launcher_round.png"))
+    }
+}

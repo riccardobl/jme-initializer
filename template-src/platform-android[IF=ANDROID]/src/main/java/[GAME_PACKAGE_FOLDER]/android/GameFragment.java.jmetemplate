@@ -1,0 +1,14 @@
+package [GAME_PACKAGE].android;
+
+import [GAME_PACKAGE].Main;
+import com.jme3.app.AndroidHarnessFragment;
+import com.jme3.app.LegacyApplication;
+
+public final class GameFragment extends AndroidHarnessFragment {
+    @Override
+    protected LegacyApplication createApplication() {
+        Main game = new Main();
+        game.setShowSettings(false);
+        return game;
+    }
+}
