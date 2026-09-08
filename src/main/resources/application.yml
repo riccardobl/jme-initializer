@@ -1,2 +1,0 @@
-libraries:
-  fetchUrl: ~ # using a fetch url of null triggers the application to instead fetch it from its own source directory (good for local development
